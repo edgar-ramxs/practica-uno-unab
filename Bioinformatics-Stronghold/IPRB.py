@@ -3,6 +3,7 @@
 # DOCUMENTATION:
 #
 # https://susannahgo.files.wordpress.com/2015/11/rosalind-iprb.pdf
+# https://www.youtube.com/watch?v=8X7WNs6R2zQ&list=WL&index=1&t=478s
 
 
 from argparse import ArgumentParser
@@ -16,42 +17,61 @@ args = parser.parse_args()
 
 with open(f"./inputs/{args.file_name}", "r") as file:
     INPUT = list(map(int, file.read().strip().split()))
-    # [0] -> k -> individuals are homozygous dominant for a factor
-    # [1] -> m -> are heterozygous
-    # [2] -> n -> are homozygous recessive.
+    # print(K, M, N)
+    # [0] -> k -> homozygous dominant   ->  AA
+    # [1] -> m -> heterozygous          ->  Aa
+    # [2] -> n -> homozygous recessive  ->  aa
+
+import numpy as np
 
 
 def firts_law_medel(organisms: list = INPUT) -> float:
     population = sum(organisms)
+    dominant_fraction, sum_props, probabilities = [], [], []
 
-    # k -> AA
-    # m -> Ab
-    # n -> bb
+    AA = np.array([[0, 0]])
+    Aa = np.array([[0, 1]])
+    aa = np.array([[1, 1]])
 
-    return
+    for i in range(3):
+        for j in range(3):
+            if i != j:
+                probability = (organisms[i] / population) * (   organisms[j] / (population - 1)     )
+            else:
+                probability = (organisms[i] / population) * (   (organisms[j] - 1) / (population - 1)   )
+            probabilities.append(probability)
+    for i in [AA, Aa, aa]:
+        for j in [AA, Aa, aa]:
+            matrix = i.T * j
+            fraction = np.sum(matrix == 0) / 4.0
+            dominant_fraction.append(fraction)
+    for i in range(0, 9):
+        sum_props.append(dominant_fraction[i] * probabilities[i])
+    return sum(sum_props)
 
 
-def take_two(n):
-    """Calcula la combinación de 2 elementos de un conjunto de n elementos."""
-    return n * (n - 1) // 2
+def firts_law_medel_2(organisms: list = INPUT) -> float:
+    def take_two(n):
+        return n * (n - 1) // 2
+    
+    dominants, heteroz, recessives = organisms
+    total_pairs = take_two(sum(organisms))
 
-def main(input_str="2 2 2"):
-    """Calcula la probabilidad de descendencia con un alelo dominante."""
-    numbers = list(map(int, input_str.split()))  # Convierte la entrada en una lista de números
-    total_pairs = take_two(sum(numbers))  # Combinaciones totales de parejas
-
-    dominant_pairs = (
-        take_two(numbers[0])  # Dos homocigotos dominantes
-        + 3 / 4 * take_two(numbers[1])  # Dos heterocigotos
-        + numbers[0] * numbers[1]  # Un homocigoto dominante y un heterocigoto
-        + numbers[0] * numbers[2]  # Un homocigoto dominante y un homocigoto recesivo
-        + 1 / 2 * numbers[1] * numbers[2]  # Un heterocigoto y un homocigoto recesivo
+    dominant_pairs = ( 
+        take_two(dominants)                             # Dos homocigotos dominantes
+        + 3 / 4 * take_two(heteroz)                     # Dos heterocigotos
+        + dominants * heteroz                           # Un homocigoto dominante y un heterocigoto
+        + dominants * recessives                        # Un homocigoto dominante y un homocigoto recesivo
+        + 1 / 2 * heteroz * recessives                  # Un heterocigoto y un homocigoto recesivo
     )
-
+    
     probability = dominant_pairs / total_pairs
-    print(probability)
 
-main()
+    return probability
 
-# with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-#     output_file.write()
+
+# print(firts_law_medel())
+# print(firts_law_medel_2())
+
+with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+    output_file.write(str(firts_law_medel()))
