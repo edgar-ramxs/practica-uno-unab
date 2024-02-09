@@ -1,4 +1,5 @@
 # Computing GC Content
+# https://rosalind.info/problems/gc/
 
 from argparse import ArgumentParser
 
@@ -18,6 +19,7 @@ def Computing_GC_Content(dna_records=dna_in_fasta) -> str:
     temp = -1
     output = ""
     for record in dna_records:
+
         # Old Version
         # total_character = len(record.seq)
         # gc_count = record.seq.count("G") + record.seq.count("C")
@@ -32,8 +34,8 @@ def Computing_GC_Content(dna_records=dna_in_fasta) -> str:
     return output
 
 
-output = Computing_GC_Content()
+OUTPUT = Computing_GC_Content()
 
 
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(output)
+    output_file.write(OUTPUT)

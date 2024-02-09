@@ -1,4 +1,5 @@
 # Finding a Motif in DNA
+# https://rosalind.info/problems/subs/
 
 from argparse import ArgumentParser
 
@@ -10,9 +11,6 @@ args = parser.parse_args()
 
 with open(f"./inputs/{args.file_name}", "r") as file:
     S, T = file.read().strip().split()
-    # DNA STRING  -> S > T.
-    # print(S)
-    # print(T)
 
 
 def finding_motif_in_dna(s: str = S, t: str = T) -> str:

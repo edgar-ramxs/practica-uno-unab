@@ -1,4 +1,5 @@
 # Connected Components
+# https://rosalind.info/problems/cc/
 
 from argparse import ArgumentParser
 
@@ -56,9 +57,6 @@ def connected_components2(graph: dict = GRAFO, nodes: int = VERTICES) -> int:
 
     return components
 
-
-# print(connected_components())
-# print(connected_components2())
 
 output = str(connected_components())
 

@@ -1,4 +1,5 @@
 # Translating RNA into Protein
+# https://rosalind.info/problems/prot/
 
 from argparse import ArgumentParser
 
@@ -9,7 +10,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 with open(f"./inputs/{args.file_name}", "r") as file:
-    RNA = file.read().strip().split()[0]
+    RNA = file.readline().strip()
 
 RNA_CODONS = {
     "UUU": "F",
@@ -89,13 +90,12 @@ def translating_protein(codons: dict = RNA_CODONS, rna: str = RNA):
     return protein
 
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(translating_protein())
-
+# Usando Libreria
 # from Bio.Seq import Seq
 # rna = Seq(RNA)
 # prot = rna.translate(to_stop=True)
 # print(prot)
 
 
-
+with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+    output_file.write(translating_protein())

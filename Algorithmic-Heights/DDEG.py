@@ -1,14 +1,16 @@
 # Double-Degree Array
+# https://rosalind.info/problems/ddeg/
 
 from argparse import ArgumentParser
 
 parser = ArgumentParser(description="name of the input file")
 parser.add_argument(
-    "file_name", type=str, help="name of document with the example input"
+    "-file", "--file_name", type=str, help="name of document with the example input"
 )
 args = parser.parse_args()
+
 degree_neighbors = {}
-output = ""
+OUTPUT = ""
 
 
 def counting_degree_vertex(node1: int, node2: int, dictionary=degree_neighbors):
@@ -30,12 +32,12 @@ with open(f"./inputs/{args.file_name}", "r") as file:
 for node in range(1, nodes + 1):
     count = 0
     if not node in degree_neighbors:
-        output += f"0 "
+        OUTPUT += f"0 "
     else:
         for neighbors in degree_neighbors[node][1:]:
             count += degree_neighbors[neighbors][0]
-        output += f"{count} "
+        OUTPUT += f"{count} "
 
 
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(str(output))
+    output_file.write(OUTPUT)

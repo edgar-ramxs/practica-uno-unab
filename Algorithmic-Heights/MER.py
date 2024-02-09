@@ -1,4 +1,5 @@
 # Merge Two Sorted Arrays
+# https://rosalind.info/problems/mer/
 
 from argparse import ArgumentParser
 
@@ -14,9 +15,11 @@ with open(f"./inputs/{args.file_name}", "r") as file:
     M = int(file.readline().strip())
     B = list(map(int, file.readline().split()))
 
+
 def Merge_Arrays(list1: list = A, list2: list = B) -> str:
     C = sorted(list1 + list2)
     return " ".join(map(str, C))
+
 
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
     output_file.write(Merge_Arrays())

@@ -1,4 +1,5 @@
 # Counting DNA Nucleotides
+# https://rosalind.info/problems/dna/
 
 from argparse import ArgumentParser
 
@@ -9,10 +10,10 @@ parser.add_argument(
 args = parser.parse_args()
 
 with open(f"./inputs/{args.file_name}", "r") as file:
-    DNA = file.read().strip().split()[0]
+    DNA = file.read().rstrip()
 
 
-def counting_dna(dna: str):
+def counting_dna(dna: str = DNA) -> str:
     output = ""
     for aux in ["A", "C", "G", "T"]:
         output += f"{dna.count(aux)} "

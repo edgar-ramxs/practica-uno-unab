@@ -1,4 +1,5 @@
 # Data Formats
+# https://rosalind.info/problems/frmt/
 
 from argparse import ArgumentParser
 
@@ -12,7 +13,8 @@ with open(f"./inputs/{args.file_name}", "r") as file:
     INPUT = file.readline().strip().split()
 
 from Bio import Entrez, SeqIO
-Entrez.email = "hola@gmail.com"
+
+Entrez.email = "holacomoestas@gmail.com"
 handle = Entrez.efetch(db="nucleotide", id=[", ".join(INPUT)], rettype="fasta")
 records = list(SeqIO.parse(handle, "fasta"))
 

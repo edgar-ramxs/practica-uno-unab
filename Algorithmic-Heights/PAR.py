@@ -1,7 +1,7 @@
 # 2-Way Partition
+# https://rosalind.info/problems/par/
 
 # INFO:
-# QUICK SORT
 # -> https://programiz.com/dsa/quick-sort
 # -> https://www.geeksforgeeks.org/python-program-for-quicksort/
 # -> https://favtutor.com/blogs/quicksort-python

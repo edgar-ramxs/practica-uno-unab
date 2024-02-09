@@ -1,7 +1,7 @@
 # Mendel's First Law
+# https://rosalind.info/problems/iprb/
 
-# DOCUMENTATION:
-#
+# INFO:
 # https://susannahgo.files.wordpress.com/2015/11/rosalind-iprb.pdf
 # https://www.youtube.com/watch?v=8X7WNs6R2zQ&list=WL&index=1&t=478s
 
@@ -13,7 +13,6 @@ parser.add_argument(
     "-file", "--file_name", type=str, help="name of document with the example input"
 )
 args = parser.parse_args()
-
 
 with open(f"./inputs/{args.file_name}", "r") as file:
     INPUT = list(map(int, file.read().strip().split()))
@@ -36,9 +35,13 @@ def firts_law_medel(organisms: list = INPUT) -> float:
     for i in range(3):
         for j in range(3):
             if i != j:
-                probability = (organisms[i] / population) * (   organisms[j] / (population - 1)     )
+                probability = (organisms[i] / population) * (
+                    organisms[j] / (population - 1)
+                )
             else:
-                probability = (organisms[i] / population) * (   (organisms[j] - 1) / (population - 1)   )
+                probability = (organisms[i] / population) * (
+                    (organisms[j] - 1) / (population - 1)
+                )
             probabilities.append(probability)
     for i in [AA, Aa, aa]:
         for j in [AA, Aa, aa]:
@@ -53,25 +56,22 @@ def firts_law_medel(organisms: list = INPUT) -> float:
 def firts_law_medel_2(organisms: list = INPUT) -> float:
     def take_two(n):
         return n * (n - 1) // 2
-    
+
     dominants, heteroz, recessives = organisms
     total_pairs = take_two(sum(organisms))
 
-    dominant_pairs = ( 
-        take_two(dominants)                             # Dos homocigotos dominantes
-        + 3 / 4 * take_two(heteroz)                     # Dos heterocigotos
-        + dominants * heteroz                           # Un homocigoto dominante y un heterocigoto
-        + dominants * recessives                        # Un homocigoto dominante y un homocigoto recesivo
-        + 1 / 2 * heteroz * recessives                  # Un heterocigoto y un homocigoto recesivo
+    dominant_pairs = (
+        take_two(dominants)  # Dos homocigotos dominantes
+        + 3 / 4 * take_two(heteroz)  # Dos heterocigotos
+        + dominants * heteroz  # Un homocigoto dominante y un heterocigoto
+        + dominants * recessives  # Un homocigoto dominante y un homocigoto recesivo
+        + 1 / 2 * heteroz * recessives  # Un heterocigoto y un homocigoto recesivo
     )
-    
+
     probability = dominant_pairs / total_pairs
 
     return probability
 
-
-# print(firts_law_medel())
-# print(firts_law_medel_2())
 
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
     output_file.write(str(firts_law_medel()))

@@ -1,4 +1,5 @@
 # Counting Point Mutations
+# https://rosalind.info/problems/hamm/
 
 from argparse import ArgumentParser
 
@@ -11,8 +12,6 @@ args = parser.parse_args()
 
 with open(f"./inputs/{args.file_name}", "r") as file:
     S, T = file.read().strip().split()
-    # print(f"S -> {S}")
-    # print(f"T -> {T}")
 
 
 # The Hamming distance

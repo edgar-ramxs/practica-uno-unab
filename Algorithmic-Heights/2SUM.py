@@ -1,4 +1,5 @@
 # 2SUM
+# https://rosalind.info/problems/2sum/
 
 from argparse import ArgumentParser
 
@@ -31,4 +32,4 @@ def two_sum2(matrix: list = INPUT) -> str:
 
 
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(str(two_sum2()))
+    output_file.write(two_sum2())

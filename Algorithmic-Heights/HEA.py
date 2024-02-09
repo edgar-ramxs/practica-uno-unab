@@ -1,6 +1,7 @@
 # Building a Heap
+# https://rosalind.info/problems/hea/
 
-# INFO
+# INFO:
 # https://www.youtube.com/watch?v=B7hVxCmfPtM
 # https://www.geeksforgeeks.org/building-heap-from-array/
 # https://medium.com/edureka/data-structures-algorithms-in-java-d27e915db1c5
@@ -16,9 +17,6 @@ args = parser.parse_args()
 with open(f"./inputs/{args.file_name}", "r") as file:
     N = int(file.readline().strip())
     A = list(map(int, file.readline().split()))
-    # print(f"nodos -> {N}")
-    # print(f"array -> {A}")
-
 
 
 # def building_a_heap(A: list = A):
@@ -94,7 +92,7 @@ with open(f"./inputs/{args.file_name}", "r") as file:
 
 
 # building_a_heap()
-# 
+#
 # build_max_heap()
 # buildHeap()
 
@@ -117,7 +115,6 @@ def building_a_max_heap(a: list = A, n: int = N):
                 a[v], a[max_node] = a[max_node], a[v]
                 v = max_node
 
-###########################################################
 
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
     building_a_max_heap()

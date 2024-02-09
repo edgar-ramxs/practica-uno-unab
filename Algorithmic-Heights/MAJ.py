@@ -1,7 +1,7 @@
 # Majority Element
+# https://rosalind.info/problems/maj/
 
-# DOCUMENTATION:
-#
+# INFO:
 # Algoritmo de Boyer-Moore
 # https://es.wikipedia.org/wiki/Algoritmo_de_b%C3%BAsqueda_de_cadenas_Boyer-Moore
 # https://www.geeksforgeeks.org/majority-element/
@@ -10,7 +10,7 @@ from argparse import ArgumentParser
 
 parser = ArgumentParser(description="name of the input file")
 parser.add_argument(
-    "file_name", type=str, help="name of document with the example input"
+    "-file", "--file_name", type=str, help="name of document with the example input"
 )
 args = parser.parse_args()
 

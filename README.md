@@ -26,6 +26,7 @@ Descripcion:
 - Python Village
   + **Modulo Completado**
 - Algorithmic Heights
+  + PAR
 - Bioinformatics Armory
   + MEME
 - Bioinformatics Stronghold

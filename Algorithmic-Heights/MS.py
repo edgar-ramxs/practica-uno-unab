@@ -1,4 +1,5 @@
 # Merge Sort
+# https://rosalind.info/problems/ms/
 
 # INFO:
 # https://medium.com/@tudorache.a.bogdan/divide-and-conquer-merge-sort-59b6e5ebe1db
@@ -15,10 +16,11 @@ with open(f"./inputs/{args.file_name}", "r") as file:
     N = int(file.readline().strip())
     A = list(map(int, file.readline().split()))
 
+
 def merge_sort(array: list):
     if len(array) > 1:
         mitad = len(array) // 2
-        
+
         izquierda = array[:mitad]
         derecha = array[mitad:]
 
@@ -35,7 +37,7 @@ def merge_sort(array: list):
                 array[k] = derecha[j]
                 j += 1
             k += 1
-        
+
         while i < len(izquierda):
             array[k] = izquierda[i]
             i += 1
@@ -45,6 +47,7 @@ def merge_sort(array: list):
             array[k] = derecha[j]
             j += 1
             k += 1
+
 
 merge_sort(A)
 
