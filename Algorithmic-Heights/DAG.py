@@ -1,4 +1,4 @@
-# DAG
+# Testing Acyclicity
 # https://rosalind.info/problems/dag/
 
 # INFO:
@@ -58,6 +58,6 @@ def testing_acyclicity(grafos: list = GRAFOS) -> str:
 
     return output
 
-
+OUTPUT = testing_acyclicity()
 with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(testing_acyclicity())
+    output_file.write(OUTPUT)
