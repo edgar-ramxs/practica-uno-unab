@@ -27,6 +27,7 @@ Descripcion:
   + **Modulo Completado**
 - Algorithmic Heights
   + PAR
+  + SCC
   + 2SAT
 - Bioinformatics Armory
   + MEME
