@@ -48,6 +48,7 @@ def dfs2_iterative(start_vertex, cl, comp, graph_t):
 
 
 def solve_2sat(n, graph, graph_t):
+    output = ''
     order = []
     used = [False] * n
     for i in range(n):
@@ -65,18 +66,17 @@ def solve_2sat(n, graph, graph_t):
     assignment = [False] * (n // 2)
     for i in range(0, n, 2):
         if comp[i] == comp[i + 1]:
-            print(0)
-            return False
+            output += f'{0}'
+            return output
         assignment[i // 2] = comp[i] > comp[i + 1]
 
-    print(1, end=" ")
+    output += f'{1} '
     for i in range(len(assignment)):
         if assignment[i]:
-            print(i + 1, end=" ")
+            output += f'{i + 1} '
         else:
-            print(-(i + 1), end=" ")
-    print()
-    return True
+            output += f'{-(i + 1)} '
+    return output
 
 
 if __name__ == "__main__":
@@ -117,113 +117,17 @@ if __name__ == "__main__":
                 graph_t = [[] for _ in range(2 * variable)]
                 graphs_t.append(graph_t)
 
+    output = ''
     for i in range(k):
         graph = graphs[i]
         graph_t = graphs_t[i]
         variable = variables[i]
-        solve_2sat(variable * 2, graph, graph_t)
+        output += solve_2sat(variable * 2, graph, graph_t)
+        output += '\n'
+
+    with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+        output_file.write(output)
 
 
 ################################################################################################
 
-
-# with open(f"./inputs/{args.file_name}", "r") as file:
-#     K = int(file.readline().strip())
-#     FORMULAS, INTANCES = [], []
-
-#     for line in file:
-#         if line.strip():
-#             v1, v2 = map(int, line.strip().split(" "))
-#             formula.append((v1, v2))
-#         else:
-#             VARIABLES, CLAUSES = map(int, file.readline().strip().split(" "))
-#             formula = []
-#             INTANCES.append((VARIABLES, CLAUSES))
-#             FORMULAS.append(formula)
-
-
-# from collections import defaultdict
-
-
-# class TwoSAT:
-#     def __init__(self, num_vars):
-#         self.stack = []
-#         self.scc_result = []
-#         self.num_vars = num_vars
-#         self.graph = defaultdict(list)
-#         +1 to account for 0 index
-#         self.scc = [-1] * (2 * num_vars + 1)
-#         +1 to account for 0 index
-#         self.visited = [False] * (2 * num_vars + 1)
-
-#     def add_clause(self, var1, var2):
-#         self.graph[-var1].append(var2)
-#         self.graph[-var2].append(var1)
-
-#     def dfs(self, u):
-#         self.visited[u] = True
-#         for v in self.graph[u]:
-#             if not self.visited[v]:
-#                 self.dfs(v)
-#         self.stack.append(u)
-
-#     def dfs_scc(self, u, scc_id):
-#         self.visited[u] = False
-#         self.scc[u] = scc_id
-#         for v in self.graph[u]:
-#             if self.visited[v]:
-#                 self.dfs_scc(v, scc_id)
-
-#     def satisfy_2sat(self):
-#         for i in range(1, 2 * self.num_vars + 1):
-#             if not self.visited[i]:
-#                 self.dfs(i)
-
-#         scc_id = 0
-#         self.stack.reverse()
-#         for u in self.stack:
-#             if self.visited[u]:
-#                 self.dfs_scc(u, scc_id)
-#                 scc_id += 1
-
-#         for i in range(1, self.num_vars + 1):
-#             if self.scc[i] == self.scc[-i]:
-#                 Unsatisfiable, no SCCs
-#                 return None, []
-#         assignment = [False] * self.num_vars
-#         for i in range(1, self.num_vars + 1):
-#             if self.scc[i] > self.scc[-i]:
-#                 assignment[i - 1] = True
-
-#         Gather SCCs
-#         self.scc_result = [[] for _ in range(scc_id)]
-#         for i in range(1, 2 * self.num_vars + 1):
-#             self.scc_result[self.scc[i]].append(i)
-
-#         return assignment, self.scc_result
-
-
-# Example usage:
-# if __name__ == "__main__":
-#     for idx in range(K):
-#         variables, clauses = INTANCES[idx]
-#         sat_solver = TwoSAT(variables)
-
-#         for V in FORMULAS[idx]:
-#             x, y = V
-#             sat_solver.add_clause(x, y)
-
-#         assignment, sccs = sat_solver.satisfy_2sat()
-#         if assignment:
-#             print("Satisfiable. Assignment:", assignment)
-#             print("Strongly Connected Components (SCCs):", sccs)
-#         else:
-#             print("Unsatisfiable.")
-
-#         print()
-
-
-################################################################################################
-# OUTPUT = ""
-# with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-#     output_file.write(OUTPUT)

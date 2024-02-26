@@ -1,6 +1,8 @@
 # Shortest Paths in DAG
 # https://rosalind.info/problems/sdag/
 
+# INFO:
+#
 
 from argparse import ArgumentParser
 
@@ -9,6 +11,7 @@ parser.add_argument(
     "-file", "--file_name", type=str, help="name of document with the example input"
 )
 args = parser.parse_args()
+
 
 with open(f"./inputs/{args.file_name}", "r") as file:
     V, E = map(int, file.readline().strip().split())
