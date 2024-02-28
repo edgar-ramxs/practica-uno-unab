@@ -1,47 +1,47 @@
 # Degree Array
 # https://rosalind.info/problems/deg/
 
-# Explicacion:
-# El problema plantea que dado a las aristas de un grafo,
-# se devuelta un array con los grados de los vertices ubicadolos en la poscion del vertice dentro del array.
+
+## INFO:
 #
-#
-# NOTA:
-# primera linea, num de nodos - num de aristas
-# Se puede optimizar en memoria y tiempo si se deja todo en una lista y se usa la funcion .count(node) para su grado en base de cuantas veces es mensionado en las aristas
 
 
-from argparse import ArgumentParser
-
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
-
-DEGREE_VERTEXS = {}
-OUTPUT = ""
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
 
-def counting_degree_vertex(node: int, dictionary=DEGREE_VERTEXS):
+## CONSTANTS
+FILE_NAME = "rosalind_deg.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+def counting_degree_vertex(node: int, dictionary: dict):
     if not node in dictionary:
         dictionary[node] = 1
     else:
         dictionary[node] += 1
 
 
-with open(f"./inputs/{args.file_name}", "r") as file:
-    nodes, edges = file.readline().strip().split(" ")
+with open(PATH_INPUT, "r") as file:
+    V, E = map(int, file.readline().strip().split(" "))
+    DEGREE_VERTEXS = {}
+
     for line in file:
-        node1, node2 = line.strip().split(" ")
-        counting_degree_vertex(int(node1))
-        counting_degree_vertex(int(node2))
+        node1, node2 = map(int, line.strip().split(" "))
+        counting_degree_vertex(node1)
+        counting_degree_vertex(node2)
 
 
-DEGREE_VERTEXS = sorted(DEGREE_VERTEXS.items())
-
-for node, degree in DEGREE_VERTEXS:
+VERTEXS = sorted(DEGREE_VERTEXS.items())
+OUTPUT = ""
+for node, degree in VERTEXS:
     OUTPUT += f"{degree} "
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

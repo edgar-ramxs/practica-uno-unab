@@ -1,20 +1,36 @@
 # 2SUM
 # https://rosalind.info/problems/2sum/
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
-
-with open(f"./inputs/{args.file_name}", "r") as file:
-    INPUT = [list(map(int, line.split())) for line in file]
-    K, N = INPUT.pop(0)
+## INFO:
+#
 
 
-def two_sum2(matrix: list = INPUT) -> str:
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
+
+
+## CONSTANTS
+FILE_NAME = "rosalind_2sum.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
+    K, N = list(map(int, file.readline().strip().split()))
+    ARRAYS = []
+
+    for line in file:
+        arr = list(map(int, line.strip().split()))
+        ARRAYS.append(arr)
+
+
+def two_sum2(arrays: list = ARRAYS) -> str:
+    
     def find_pairs(array: list) -> str:
         result = {}
         for index, value in enumerate(array):
@@ -26,10 +42,13 @@ def two_sum2(matrix: list = INPUT) -> str:
         return "-1"
 
     output = ""
-    for array in matrix:
+    for array in arrays:
         output += f"{find_pairs(array)}\n"
     return output
 
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(two_sum2())
+OUTPUT = two_sum2()
+
+
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(OUTPUT)

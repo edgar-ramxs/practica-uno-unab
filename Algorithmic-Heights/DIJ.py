@@ -1,91 +1,97 @@
 # Dijkstra's Algorithm
 # https://rosalind.info/problems/dij/
 
-# INFO:
+
+## INFO:
 # https://www6.uniovi.es/usr/cesar/Uned/EDA/Apuntes/TAD_apUM_07.pdf
 # https://es.wikipedia.org/wiki/Grafo_ponderado
 # https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra
 # http://algorithmics.lsi.upc.edu/docs/Dasgupta-Papadimitriou-Vazirani.pdf
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
-with open(f"./inputs/{args.file_name}", "r") as file:
-    NODES, EDGES = map(int, file.readline().strip().split())
-    GRAFO = {node + 1: [] for node in range(NODES)}
+
+## CONSTANTS
+FILE_NAME = "rosalind_dij.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
+    V, E = map(int, file.readline().strip().split())
+    GRAPH = {node + 1: [] for node in range(V)}
     for line in file.readlines():
         node1, node2, weight = map(int, line.strip().split())
-        GRAFO[node1].append((node2, weight))
+        GRAPH[node1].append((node2, weight))
 
 
-def dijkstra1(grafo: dict = GRAFO, nodo_origen: int = 1) -> str:
-    distancias = {nodo: float("inf") for nodo in grafo}
-    distancias[nodo_origen] = 0
-    visitados = set()
-
-    while visitados != set(grafo):
-        nodo_actual = min(
-            (nodo for nodo in distancias if nodo not in visitados), key=distancias.get
-        )
-        visitados.add(nodo_actual)
-
-        for vecino, peso in grafo[nodo_actual]:
-            if vecino not in visitados:
-                nueva_distancia = distancias[nodo_actual] + peso
-                if nueva_distancia < distancias[vecino]:
-                    distancias[vecino] = nueva_distancia
-
+def dijkstra1(graph: dict = GRAPH, node_origin: int = 1) -> str:
+    distances = {node: float("inf") for node in graph}
+    distances[node_origin] = 0
+    visited = set()
+    
+    while visited != set(graph):
+        current_node = min((node for node in distances if node not in visited), key=distances.get)
+        visited.add(current_node)
+        for neighbor, weight in graph[current_node]:
+            if neighbor not in visited:
+                new_distance = distances[current_node] + weight
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+    
     output = ""
-    for nodo, distancia in distancias.items():
-        if distancia == float("inf"):
+    for node, distance in distances.items():
+        if distance == float("inf"):
             output += "-1 "
         else:
-            output += f"{distancia} "
+            output += f"{distance} "
     return output
 
 
-def dijkstra2(grafo: dict = GRAFO, nodo_origen: int = 1) -> str:
-    distancias = {nodo: float("inf") for nodo in grafo}
-    distancias[nodo_origen] = 0
-    visitados = set()
-    heap = [(0, nodo_origen)]
+def dijkstra2(graph: dict = GRAPH, node_origin: int = 1) -> str:
+    distances = {node: float("inf") for node in graph}
+    distances[node_origin] = 0
+    visited = set()
+    heap = [(0, node_origin)]
 
     while heap:
         min_dist = float("inf")
         min_vertice = None
         for dist, vertice in heap:
-            if dist < min_dist and vertice not in visitados:
+            if dist < min_dist and vertice not in visited:
                 min_dist = dist
                 min_vertice = vertice
 
         if min_vertice is None:
             break
-
         heap.remove((min_dist, min_vertice))
-        visitados.add(min_vertice)
-
-        for vecino, peso in grafo[min_vertice]:
-            if vecino not in visitados:
-                nueva_distancia = min_dist + peso
-                if nueva_distancia < distancias[vecino]:
-                    distancias[vecino] = nueva_distancia
-                    heap.append((nueva_distancia, vecino))
+        visited.add(min_vertice)
+        
+        for neighbor, weight in graph[min_vertice]:
+            if neighbor not in visited:
+                new_distance = min_dist + weight
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    heap.append((new_distance, neighbor))
 
     output = ""
-    for nodo, distancia in distancias.items():
-        if distancia == float("inf"):
+    for node, distance in distances.items():
+        if distance == float("inf"):
             output += "-1 "
         else:
-            output += f"{distancia} "
+            output += f"{distance} "
     return output
 
 
+# OUTPUT = dijkstra1()
 OUTPUT = dijkstra2()
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

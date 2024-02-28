@@ -1,22 +1,29 @@
 # Strongly Connected Components
 # https://rosalind.info/problems/scc/
 
-# INFO:
+
+## INFO:
 # https://www.geeksforgeeks.org/strongly-connected-components/
 # https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm
 # https://gist.github.com/akueisara/120d8d5b4e1a663c606987b00e6c3c15
 # https://es.wikipedia.org/wiki/Componente_fuertemente_conexo
 
 
-from argparse import ArgumentParser
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+## CONSTANTS
+FILE_NAME = "rosalind_scc.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     V, E = map(int, file.readline().strip().split())
     GRAPH = {node + 1: [] for node in range(V)}
     EDGES = []
@@ -26,50 +33,6 @@ with open(f"./inputs/{args.file_name}", "r") as file:
         GRAPH[node1].append(node2)
         EDGES.append((node1, node2))
 
-    # print(f"vertices: {V}, aristas: {E}")
-    # print(f"grafo: {GRAPH}")
-    # print()
-
-
-def SCC(graph: dict = GRAPH, vertices: int = V) -> list:
-
-    def DFS(graph: dict, node: int, visited: list, SCCs: list):
-        visited[node] = True
-        SCCs.append(node)
-        for i in graph[node]:
-            if not visited[i]:
-                DFS(graph, i, visited, SCCs)
-
-    def fillOrder(node: int, visited: list, stack: list):
-        visited[node] = True
-        [fillOrder(i, visited, stack) for i in graph[node] if not visited[i]]
-        stack.append(node)
-
-    def getTranspose(graph: dict, vertices: int):
-        return {
-            v: [i for i in range(1, vertices + 1) if v in graph[i]]
-            for v in range(1, vertices + 1)
-        }
-
-    stack = []
-    visited = [False] * (vertices + 1)
-
-    # PILA
-    [fillOrder(ve, visited, stack) for ve in range(1, vertices + 1) if not visited[ve]]
-
-    gr = getTranspose(graph, vertices)
-
-    visited = [False] * (vertices + 1)
-    SCCs = []
-
-    while stack:
-        i = stack.pop()
-        if not visited[i]:
-            DFS(gr, i, visited, SCCs)
-            SCCs.append("")
-
-    return SCCs.count("")
-
 
 class Node:
     def __init__(self, value):
@@ -77,7 +40,8 @@ class Node:
         self.index = None
         self.lowlink = None
         self.on_stack = False
-        self.neighbors = []  # List to store neighboring nodes
+        self.neighbors = []
+
 
 class Graph:
     def __init__(self):
@@ -88,7 +52,7 @@ class Graph:
             self.nodes[u] = Node(u)
         if v not in self.nodes:
             self.nodes[v] = Node(v)
-        self.nodes[u].neighbors.append(self.nodes[v])  # Append the Node object
+        self.nodes[u].neighbors.append(self.nodes[v])
 
     def tarjan(self):
         index = 0
@@ -130,9 +94,7 @@ class Graph:
 
 
 class GFG:
-    # dfs Function to reach destination
     def dfs(self, curr, des, adj, vis):
-        # If current node is the destination, return True
         if curr == des:
             return True
         vis[curr] = 1
@@ -142,33 +104,20 @@ class GFG:
                     return True
         return False
 
-    # To tell whether there is a path from source to destination
     def isPath(self, src, des, adj):
         vis = [0] * (len(adj) + 1)
         return self.dfs(src, des, adj, vis)
 
-    # Function to return all the strongly connected components of a graph.
     def findSCC(self, n, a):
-        # Stores all the strongly connected components.
         ans = []
-
-        # Stores whether a vertex is a part of any Strongly Connected Component
         is_scc = [0] * (n + 1)
-
         adj = [[] for _ in range(n + 1)]
-
         for i in range(len(a)):
             adj[a[i][0]].append(a[i][1])
-
-        # Traversing all the vertices
         for i in range(1, n + 1):
             if not is_scc[i]:
-                # If a vertex i is not a part of any SCC, insert it into a new SCC list
-                # and check for other vertices whether they can be part of this list.
                 scc = [i]
                 for j in range(i + 1, n + 1):
-                    # If there is a path from vertex i to vertex j and vice versa,
-                    # put vertex j into the current SCC list.
                     if (
                         not is_scc[j]
                         and self.isPath(i, j, adj)
@@ -176,32 +125,21 @@ class GFG:
                     ):
                         is_scc[j] = 1
                         scc.append(j)
-                # Insert the SCC containing vertex i into the final list.
                 ans.append(scc)
         return ans
 
 
-# Driver Code Starts
-if __name__ == "__main__":
-    # Example usage
-    graph = Graph()
-
-    for edge in EDGES:
-        graph.add_edge(edge[0], edge[1])
-
-    scc_components = graph.tarjan()
-    print("Strongly connected components:")
-    print(len(scc_components))
-
-# obj = GFG()
-# ans = obj.findSCC(V, EDGES)
-# print("Strongly Connected Components are:")
-# print(len(ans))
+# graph = Graph()
+# for edge in EDGES:
+#     graph.add_edge(edge[0], edge[1])
+# scc_components = graph.tarjan()
+# print(f"Strongly connected components: {len(scc_components)}")
+# print()
+obj = GFG()
+ans = obj.findSCC(V, EDGES)
+OUTPUT = f"{len(ans)}"
+print(f"Strongly Connected Components are: {OUTPUT}")
 
 
-# This code is contributed by shivamgupta310570
-
-
-# OUTPUT = f"{SCC()}"
-# with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-#     output_file.write(OUTPUT)
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(OUTPUT)

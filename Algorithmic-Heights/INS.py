@@ -1,24 +1,32 @@
 # Insertion Sort
 # https://rosalind.info/problems/ins/
 
-# INFO:
+
+## INFO:
 # https://www.toptal.com/developers/sorting-algorithms/insertion-sort
 # https://en.wikipedia.org/wiki/Insertion_sort
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+
+## CONSTANTS
+FILE_NAME = "rosalind_ins.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     N = int(file.readline().strip())
     A = list(map(int, file.readline().strip().split()))
 
 
-def insertion_sort(n_elements: int, array: list):
+def insertion_sort(array: list = A, n_elements: int = N):
     swap = 0
     for i in range(1, n_elements):
         j = i
@@ -29,7 +37,8 @@ def insertion_sort(n_elements: int, array: list):
     return swap
 
 
-output = insertion_sort(N, A)
+OUTPUT = str(insertion_sort())
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(str(output))
+
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(OUTPUT)

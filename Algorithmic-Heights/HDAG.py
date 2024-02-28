@@ -1,20 +1,26 @@
 # Hamiltonian Path in DAG
 # https://rosalind.info/problems/hdag
 
-# INFO:
+
+## INFO:
 # https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.tournament.hamiltonian_path.html
 
 
-from argparse import ArgumentParser
-
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+## CONSTANTS
+FILE_NAME = "rosalind_hdag.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     K = int(file.readline().strip())
     GRAPHS, VERTEXES, EDGES = [], [], []
 
@@ -67,40 +73,8 @@ def hamiltonian_path(G: list = GRAPHS, V: list = VERTEXES, k: int = K) -> str:
     return output
 
 
-# ARREGLAR
-# def hamiltonian_path(G: list = GRAPHS, V: list = VERTEXES, k: int = K) :
-
-#     def topological_sort_and_check(graph: dict, vertice: int) -> tuple[bool, list]:
-#         path = []
-#         visited = set()
-
-#         def explore(v: int) -> None:
-#             if v in visited:
-#                 return
-#             visited.add(v)
-#             for neighbor in graph[v]:
-#                 explore(neighbor)
-#             path.append(v)
-
-#         for v in range(1, vertice + 1):
-#             if v not in visited:
-#                 explore(v)
-
-#         return check_consecutive(path, graph), path
-
-#     def check_consecutive(path: list, graph: dict) -> bool:
-#         for i, v in enumerate(path[:-1]):
-#             if path[i + 1] not in graph[v]:
-#                 return False
-#         return True
-
-#     for n in range(k):
-#         graph = G[n]
-#         vertice = V[n]
-#         is_hamiltonian, path = topological_sort_and_check(graph, vertice)
-#         yield f"{1 if is_hamiltonian else -1} {' '.join(map(str, path))}\n"
-
-
 OUTPUT = hamiltonian_path()
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+
+
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

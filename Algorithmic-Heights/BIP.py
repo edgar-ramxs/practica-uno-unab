@@ -1,32 +1,44 @@
 # BIP
 # https://rosalind.info/problems/bip/
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## INFO:
+#
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
+
+
+## CONSTANTS
+FILE_NAME = "rosalind_bip.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     K = int(file.readline().strip())
-    GRAFOS, vertices, aristas = [], [], []
+    GRAPHS, VERTICES, EDGES = [], [], []
 
     for line in file:
         if line.strip():
-            l = list(map(int, line.strip().split(" ")))
-            grafo[l[0]].append(l[1])
-            grafo[l[1]].append(l[0])
+            node1, node2 = list(map(int, line.strip().split(" ")))
+            # Undirected Graph
+            graph[node1].append(node2)
+            graph[node2].append(node1)
         else:
-            vertice, arista = map(int, file.readline().strip().split(" "))
-            grafo = {i + 1: [] for i in range(vertice)}
-            GRAFOS.append(grafo)
-            vertices.append(vertice)
-            aristas.append(arista)
+            V, E = map(int, file.readline().strip().split(" "))
+            graph = {node + 1: [] for node in range(V)}
+            GRAPHS.append(graph)
+            VERTICES.append(V)
+            EDGES.append(E)
 
 
-def testing_bipartiteness(grafos: list = GRAFOS, k: int = K) -> str:
+def testing_bipartiteness1(graphs: list = GRAPHS, k: int = K) -> str:
 
     def bip_test(grafo: dict, vertice: int, visitados: list, color: list) -> bool:
         for i in grafo[vertice]:
@@ -42,26 +54,24 @@ def testing_bipartiteness(grafos: list = GRAFOS, k: int = K) -> str:
 
     output = ""
     for i in range(k):
-        graph = grafos[i]
-        vertice = vertices[i]
+        graph, num_vertices = graphs[i], VERTICES[i]
+        visited = [False for v in range(num_vertices + 1)]
+        color = [False for v in range(num_vertices + 1)]
+        visited[1] = True
 
-        visitados = [False for i in range(vertice + 1)]
-        color = [False for i in range(vertice + 1)]
-        visitados[1] = True
-
-        if bip_test(graph, 1, visitados, color):
+        if bip_test(graph, 1, visited, color):
             output += f"{1} "
         else:
             output += f"{-1} "
+    
     return output
 
 
-def testing_bipartiteness2(grafos: list = GRAFOS, k: int = K) -> str:
-    output = ""
+def testing_bipartiteness2(graphs: list = GRAPHS, k: int = K) -> str:
 
-    def bip_test(grafo: dict) -> int:
+    def bip_test(graph: dict) -> int:
         colors = {}
-        for vertex in grafo:
+        for vertex in graph:
             if vertex not in colors:
                 colors[vertex] = 0
                 queue = [vertex]
@@ -70,7 +80,7 @@ def testing_bipartiteness2(grafos: list = GRAFOS, k: int = K) -> str:
                     current_vertex = queue[front]
                     current_color = colors[current_vertex]
                     front += 1
-                    for neighbor in grafo[current_vertex]:
+                    for neighbor in graph[current_vertex]:
                         if neighbor not in colors:
                             colors[neighbor] = 1 - current_color
                             queue.append(neighbor)
@@ -78,12 +88,16 @@ def testing_bipartiteness2(grafos: list = GRAFOS, k: int = K) -> str:
                             return -1
         return 1
 
-    for grafo in grafos:
-        resultado = bip_test(grafo)
-        output += f"{resultado} "
+    output = ""
+    for graph in graphs:
+        output += f"{bip_test(graph)} "
 
     return output
 
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(testing_bipartiteness2())
+# OUTPUT = testing_bipartiteness1()
+OUTPUT = testing_bipartiteness2()
+
+
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(OUTPUT)

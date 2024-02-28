@@ -1,63 +1,70 @@
 # Testing Acyclicity
 # https://rosalind.info/problems/dag/
 
-# INFO:
+## INFO:
 # https://www.kaggle.com/code/bemc22/ordenamiento-topologico
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+
+## CONSTANTS
+FILE_NAME = "rosalind_dag.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     K = int(file.readline().strip())
-    GRAFOS = []
+    GRAPHS = []
 
     for line in file:
         if line.strip():
             node1, node2 = list(map(int, line.strip().split(" ")))
-            grafo[node1].append(node2)  # Grafo Dirigido
+            # Directed Graph
+            graph[node1].append(node2)
         else:
-            vertice, arista = map(int, file.readline().strip().split(" "))
-            grafo = {i + 1: [] for i in range(vertice)}
-            GRAFOS.append(grafo)
+            V, E = map(int, file.readline().strip().split(" "))
+            graph = {node + 1: [] for node in range(V)}
+            GRAPHS.append(graph)
 
 
-def testing_acyclicity(grafos: list = GRAFOS) -> str:
+def testing_acyclicity(graphs: list = GRAPHS) -> str:
 
-    def dfs(grafo: dict, vertice: int, visitados: list, en_proceso: list) -> bool:
-        if visitados[vertice]:
-            if vertice in en_proceso:
+    def dfs(graph: dict, vertice: int, visited: list, process: list) -> bool:
+        if visited[vertice]:
+            if vertice in process:
                 return True
             return False
-
-        visitados[vertice] = True
-        en_proceso.append(vertice)
-
-        for vecino in grafo[vertice]:
-            if dfs(grafo, vecino, visitados, en_proceso):
+        visited[vertice] = True
+        process.append(vertice)
+        for neighbor in graph[vertice]:
+            if dfs(graph, neighbor, visited, process):
                 return True
-
-        en_proceso.remove(vertice)
+        process.remove(vertice)
         return False
 
-    def es_ciclico(grafo: dict, vertices: int) -> int:
-        visitados = [False] * (vertices + 1)
-        for nodo in range(1, vertices + 1):
-            if dfs(grafo, nodo, visitados, []):
+    def is_cyclical(graph: dict, vertices: int) -> int:
+        visited = [False] * (vertices + 1)
+        for node in range(1, vertices + 1):
+            if dfs(graph, node, visited, []):
                 return -1
         return 1
 
     output = ""
-    for grafo in grafos:
-        resultado = es_ciclico(grafo, len(grafo))
-        output += f"{resultado} "
-
+    for graph in graphs:
+        result = is_cyclical(graph, len(graph))
+        output += f"{result} "
     return output
 
+
 OUTPUT = testing_acyclicity()
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+
+
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

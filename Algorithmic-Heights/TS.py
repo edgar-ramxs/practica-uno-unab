@@ -1,16 +1,26 @@
 # Topological Sorting
 # https://rosalind.info/problems/ts/
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## INFO:
+#
 
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
+
+
+## CONSTANTS
+FILE_NAME = "rosalind_ts.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     V, E = map(int, file.readline().strip().split())
     GRAPH = {node + 1: [] for node in range(V)}
     NODES = set()
@@ -47,5 +57,7 @@ def Topological_Sorting(g: dict = GRAPH, n: set = NODES) -> str:
 
 
 OUTPUT = Topological_Sorting()
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+
+
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

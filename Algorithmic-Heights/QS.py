@@ -2,23 +2,27 @@
 # https://rosalind.info/problems/qs/
 
 
-from argparse import ArgumentParser
-
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## INFO:
+#
 
 
-with open(f"./inputs/{args.file_name}", "r") as file:
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
+
+
+## CONSTANTS
+FILE_NAME = "rosalind_qs.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
     N = int(file.readline().strip())
     A = list(map(int, file.readline().strip().split()))
-    # print(N)
-    # print(A)
-
-
-#######################################################################################
 
 
 def partition(array, low, high):
@@ -39,9 +43,6 @@ def quickSort(array, low, high):
         quickSort(array, pi + 1, high)
 
 
-#######################################################################################
-
-
 def quick_sort(array):
     if len(array) <= 1:
         return array
@@ -52,37 +53,25 @@ def quick_sort(array):
     return quick_sort(left) + middle + quick_sort(right)
 
 
-#######################################################################################
-
-
 def QuickSort(arr):
     elements = len(arr)
-
     if elements < 2:
         return arr
-
     current_position = 0
-
     for i in range(1, elements):
         if arr[i] <= arr[0]:
             current_position += 1
             temp = arr[i]
             arr[i] = arr[current_position]
             arr[current_position] = temp
-
     temp = arr[0]
     arr[0] = arr[current_position]
     arr[current_position] = temp
-
     left = QuickSort(arr[0:current_position])
     right = QuickSort(arr[current_position + 1 : elements])
-
     arr = left + [arr[current_position]] + right
-
     return arr
 
-
-#######################################################################################
 
 B = A.copy()
 quickSort(B, 0, N - 1)
@@ -97,5 +86,7 @@ quickSort(B, 0, N - 1)
 # print(D)
 
 OUTPUT = " ".join(map(str, B))
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+
+
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

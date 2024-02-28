@@ -1,29 +1,35 @@
 # Breadth-First Search
 # https://rosalind.info/problems/bfs/
 
-# INFO:
+
+## INFO:
 # https://rosalind.info/glossary/algo-breadth-first-search/
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
-with open(f"./inputs/{args.file_name}", "r") as file:
-    VERTICES, EDGES = list(map(int, file.readline().strip().split()))
-    GRAFO = {v: [] for v in range(1, VERTICES + 1)}
+
+## CONSTANTS
+FILE_NAME = "rosalind_bfs.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
+    V, E = list(map(int, file.readline().strip().split()))
+    GRAPH = {node + 1: [] for node in range(V)}
 
     for line in file:
-        node1, node2 = line.rsplit()
-        GRAFO[int(node1)].append(int(node2))
-    # print(VERTICES, EDGES)
-    # print(graph)
+        node1, node2 = list(map(int, line.rsplit()))
+        GRAPH[node1].append(node2)
 
 
-def Breadth_first_search(graph: dict = GRAFO, vertexes: int = VERTICES, start: int = 1) -> list:
+def breadth_first_search(graph: dict = GRAPH, vertexes: int = V, start: int = 1) -> list:
     distances = [-1] * (vertexes + 1)
     distances[start] = 0
     queue = [start]
@@ -38,8 +44,9 @@ def Breadth_first_search(graph: dict = GRAFO, vertexes: int = VERTICES, start: i
     return distances[1:]
 
 
-output = Breadth_first_search()
-# print(output)
+DISTANCES = breadth_first_search()
+OUTPUT = " ".join(map(str, DISTANCES))
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(" ".join(map(str, output)))
+
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(OUTPUT)

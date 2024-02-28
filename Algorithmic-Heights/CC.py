@@ -1,25 +1,37 @@
 # Connected Components
 # https://rosalind.info/problems/cc/
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+## INFO:
+#
 
-with open(f"./inputs/{args.file_name}", "r") as file:
-    VERTICES, ARISTAS = list(map(int, file.readline().strip().split()))
-    GRAFO = {v: [] for v in range(1, VERTICES + 1)}
+
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
+
+
+## CONSTANTS
+FILE_NAME = "rosalind_cc.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+with open(PATH_INPUT, "r") as file:
+    V, E = list(map(int, file.readline().strip().split()))
+    GRAPH = {node + 1: [] for node in range(V)}
     for line in file:
-        node1, node2 = line.rsplit()
-        # grado no dirigido
-        GRAFO[int(node1)].append(int(node2))
-        GRAFO[int(node2)].append(int(node1))
+        node1, node2 = map(int, line.strip().split())
+        # undirected graph
+        GRAPH[node1].append(node2)
+        GRAPH[node2].append(node1)
 
 
-def connected_components(graph: dict = GRAFO) -> int:
+def connected_components1(graph: dict = GRAPH) -> int:
+    
     def dfs(vertex: int, visited: set) -> None:
         visited.add(vertex)
         for neighbor in graph.get(vertex, []):
@@ -28,16 +40,15 @@ def connected_components(graph: dict = GRAFO) -> int:
 
     visited = set()
     components = 0
-
     for vertex in graph:
         if vertex not in visited:
             components += 1
             dfs(vertex, visited)
-
     return components
 
 
-def connected_components2(graph: dict = GRAFO, nodes: int = VERTICES) -> int:
+def connected_components2(graph: dict = GRAPH, nodes: int = V) -> int:
+    
     def BFS(graph: dict, start: int, visited: list):
         stack = [start]
         visited[start] = True
@@ -54,11 +65,12 @@ def connected_components2(graph: dict = GRAFO, nodes: int = VERTICES) -> int:
         if not visited[vertex]:
             components += 1
             BFS(graph, vertex, visited)
-
     return components
 
 
-output = str(connected_components())
+OUTPUT = str(connected_components1())
+# output = str(connected_components2())
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-    output_file.write(output)
+
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(OUTPUT)

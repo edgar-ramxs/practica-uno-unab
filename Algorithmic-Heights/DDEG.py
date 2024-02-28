@@ -1,19 +1,26 @@
 # Double-Degree Array
 # https://rosalind.info/problems/ddeg/
 
-from argparse import ArgumentParser
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
-
-degree_neighbors = {}
-OUTPUT = ""
+## INFO:
+#
 
 
-def counting_degree_vertex(node1: int, node2: int, dictionary=degree_neighbors):
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
+
+
+## CONSTANTS
+FILE_NAME = "rosalind_ddeg.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
+
+################################################################################################
+
+def counting_degree_vertex(node1: int, node2: int, dictionary: dict):
     if not node1 in dictionary:
         dictionary[node1] = [1, node2]
     else:
@@ -21,23 +28,26 @@ def counting_degree_vertex(node1: int, node2: int, dictionary=degree_neighbors):
         dictionary[node1].append(node2)
 
 
-with open(f"./inputs/{args.file_name}", "r") as file:
-    nodes, edges = list(map(int, file.readline().strip().split()))
+with open(PATH_INPUT, "r") as file:
+    V, E = list(map(int, file.readline().strip().split()))
+    DEGREE_NEIGHBORS = {}
+
     for line in file:
-        node1, node2 = tuple(map(int, line.rstrip().split()))
-        counting_degree_vertex(node1, node2)
-        counting_degree_vertex(node2, node1)
+        node1, node2 = map(int, line.rstrip().split())
+        counting_degree_vertex(node1, node2, DEGREE_NEIGHBORS)
+        counting_degree_vertex(node2, node1, DEGREE_NEIGHBORS)
 
 
-for node in range(1, nodes + 1):
+OUTPUT = ""
+for node in range(1, V + 1):
     count = 0
-    if not node in degree_neighbors:
+    if not node in DEGREE_NEIGHBORS:
         OUTPUT += f"0 "
     else:
-        for neighbors in degree_neighbors[node][1:]:
-            count += degree_neighbors[neighbors][0]
+        for neighbors in DEGREE_NEIGHBORS[node][1:]:
+            count += DEGREE_NEIGHBORS[neighbors][0]
         OUTPUT += f"{count} "
 
 
-with open(f"./outputs/output_{args.file_name}", "w") as output_file:
+with open(PATH_OUTPUT, "w") as output_file:
     output_file.write(OUTPUT)

@@ -1,7 +1,8 @@
 # 2-Satisfiability
 # https://rosalind.info/problems/2sat/
 
-# INFO:
+
+## INFO:
 # https://en.wikipedia.org/wiki/2-satisfiability
 # https://codeforces.com/blog/entry/16205
 # https://cp-algorithms.com/graph/2SAT.html
@@ -11,16 +12,19 @@
 # https://www.wikiwand.com/en/2-satisfiability
 
 
-from argparse import ArgumentParser
+## PASS FILE NAME VIA COMMAND LINE ARGUMENTS
+# from argparse import ArgumentParser
+# parser = ArgumentParser(description="Input data file name")
+# parser.add_argument("-file", "--file_name", type=str, help="Input data document name (file.txt)")
+# FILE_NAME = parser.parse_args().__dict__["file_name"]
 
-parser = ArgumentParser(description="name of the input file")
-parser.add_argument(
-    "-file", "--file_name", type=str, help="name of document with the example input"
-)
-args = parser.parse_args()
+
+## CONSTANTS
+FILE_NAME = "rosalind_2sat.txt"
+PATH_INPUT = f"./inputs/{FILE_NAME}"
+PATH_OUTPUT = f"./outputs/output_{FILE_NAME}"
 
 ################################################################################################
-
 
 def dfs1_iterative(start_vertex, used, order, graph):
     stack = [start_vertex]
@@ -48,7 +52,7 @@ def dfs2_iterative(start_vertex, cl, comp, graph_t):
 
 
 def solve_2sat(n, graph, graph_t):
-    output = ''
+    output = ""
     order = []
     used = [False] * n
     for i in range(n):
@@ -66,68 +70,64 @@ def solve_2sat(n, graph, graph_t):
     assignment = [False] * (n // 2)
     for i in range(0, n, 2):
         if comp[i] == comp[i + 1]:
-            output += f'{0}'
+            output += f"{0}"
             return output
         assignment[i // 2] = comp[i] > comp[i + 1]
 
-    output += f'{1} '
+    output += f"{1} "
     for i in range(len(assignment)):
         if assignment[i]:
-            output += f'{i + 1} '
+            output += f"{i + 1} "
         else:
-            output += f'{-(i + 1)} '
+            output += f"{-(i + 1)} "
     return output
-
-
-if __name__ == "__main__":
-    with open(f"./inputs/{args.file_name}", "r") as f:
-
-        k = int(f.readline().strip())
-        graphs, graphs_t, variables = [], [], []
-        graph, graph_t = None, None
-
-        for line in f:
-            if line.strip():
-                a, b = map(int, line.strip().split(" "))
-                if a > 0 and b > 0:
-                    graph[2 * abs(a) - 1].append(2 * abs(b) - 2)
-                    graph[2 * abs(b) - 1].append(2 * abs(a) - 2)
-                    graph_t[2 * abs(b) - 2].append(2 * abs(a) - 1)
-                    graph_t[2 * abs(a) - 2].append(2 * abs(b) - 1)
-                elif a < 0 and b > 0:
-                    graph[2 * abs(a) - 2].append(2 * abs(b) - 2)
-                    graph[2 * abs(b) - 1].append(2 * abs(a) - 1)
-                    graph_t[2 * abs(b) - 2].append(2 * abs(a) - 2)
-                    graph_t[2 * abs(a) - 1].append(2 * abs(b) - 1)
-                elif a > 0 and b < 0:
-                    graph[2 * abs(a) - 1].append(2 * abs(b) - 1)
-                    graph[2 * abs(b) - 2].append(2 * abs(a) - 2)
-                    graph_t[2 * abs(b) - 1].append(2 * abs(a) - 1)
-                    graph_t[2 * abs(a) - 2].append(2 * abs(b) - 2)
-                else:
-                    graph[2 * abs(a) - 2].append(2 * abs(b) - 1)
-                    graph[2 * abs(b) - 2].append(2 * abs(a) - 1)
-                    graph_t[2 * abs(b) - 1].append(2 * abs(a) - 2)
-                    graph_t[2 * abs(a) - 1].append(2 * abs(b) - 2)
-            else:
-                variable, _ = map(int, f.readline().strip().split(" "))
-                variables.append(variable)
-                graph = [[] for _ in range(2 * variable)]
-                graphs.append(graph)
-                graph_t = [[] for _ in range(2 * variable)]
-                graphs_t.append(graph_t)
-
-    output = ''
-    for i in range(k):
-        graph = graphs[i]
-        graph_t = graphs_t[i]
-        variable = variables[i]
-        output += solve_2sat(variable * 2, graph, graph_t)
-        output += '\n'
-
-    with open(f"./outputs/output_{args.file_name}", "w") as output_file:
-        output_file.write(output)
 
 
 ################################################################################################
 
+with open(PATH_INPUT, "r") as f:
+    k = int(f.readline().strip())
+    graphs, graphs_t, variables = [], [], []
+    graph, graph_t = None, None
+
+    for line in f:
+        if line.strip():
+            a, b = map(int, line.strip().split(" "))
+            if a > 0 and b > 0:
+                graph[2 * abs(a) - 1].append(2 * abs(b) - 2)
+                graph[2 * abs(b) - 1].append(2 * abs(a) - 2)
+                graph_t[2 * abs(b) - 2].append(2 * abs(a) - 1)
+                graph_t[2 * abs(a) - 2].append(2 * abs(b) - 1)
+            elif a < 0 and b > 0:
+                graph[2 * abs(a) - 2].append(2 * abs(b) - 2)
+                graph[2 * abs(b) - 1].append(2 * abs(a) - 1)
+                graph_t[2 * abs(b) - 2].append(2 * abs(a) - 2)
+                graph_t[2 * abs(a) - 1].append(2 * abs(b) - 1)
+            elif a > 0 and b < 0:
+                graph[2 * abs(a) - 1].append(2 * abs(b) - 1)
+                graph[2 * abs(b) - 2].append(2 * abs(a) - 2)
+                graph_t[2 * abs(b) - 1].append(2 * abs(a) - 1)
+                graph_t[2 * abs(a) - 2].append(2 * abs(b) - 2)
+            else:
+                graph[2 * abs(a) - 2].append(2 * abs(b) - 1)
+                graph[2 * abs(b) - 2].append(2 * abs(a) - 1)
+                graph_t[2 * abs(b) - 1].append(2 * abs(a) - 2)
+                graph_t[2 * abs(a) - 1].append(2 * abs(b) - 2)
+        else:
+            variable, _ = map(int, f.readline().strip().split(" "))
+            variables.append(variable)
+            graph = [[] for _ in range(2 * variable)]
+            graphs.append(graph)
+            graph_t = [[] for _ in range(2 * variable)]
+            graphs_t.append(graph_t)
+
+output = ""
+for i in range(k):
+    graph = graphs[i]
+    graph_t = graphs_t[i]
+    variable = variables[i]
+    output += solve_2sat(variable * 2, graph, graph_t)
+    output += "\n"
+
+with open(PATH_OUTPUT, "w") as output_file:
+    output_file.write(output)
